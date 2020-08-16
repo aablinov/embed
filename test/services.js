@@ -289,6 +289,29 @@ describe('Services Regexps', () => {
     });
   });
 
+  it('Typeform', async () => {
+    const service = 'typeform';
+
+    const urls = [
+      {
+        source: 'https://andreyblinoff.typeform.com/to/jId62Uli',
+        embed: 'https://andreyblinoff.typeform.com/to/jId62Uli?typeform-embed=oembed&format=json'
+      },
+    ];
+
+    urls.forEach(url => {
+      expect(patterns[service].test(url.source)).to.be.true;
+
+      const event = composePasteEventMock('pattern', service, url.source);
+
+      embed.onPaste(event);
+
+      expect(embed.data.service).to.be.equal(service);
+      expect(embed.data.embed).to.be.equal(url.embed);
+      expect(embed.data.source).to.be.equal(url.source);
+    });
+  });
+
   it('Patterns', async () => {
     const services = {
       youtube: 'https://www.youtube.com/watch?v=wZZ7oFKsKzY',
@@ -301,7 +324,8 @@ describe('Services Regexps', () => {
       'yandex-music-album': 'https://music.yandex.ru/album/5643859',
       'yandex-music-track': 'https://music.yandex.ru/album/5643859/track/42662275',
       'yandex-music-playlist': 'https://music.yandex.ru/users/yamusic-personal/playlists/25098905',
-      'codepen': 'https://codepen.io/Rikkokiri/pen/RYBrwG'
+      'codepen': 'https://codepen.io/Rikkokiri/pen/RYBrwG',
+      typeform: 'https://andreyblinoff.typeform.com/to/jId62Uli'
     };
 
     Object
